@@ -125,3 +125,7 @@ dmypy.json
 .pyre/
 .vscode/
 *.csv
+airflow/logs
+*.pid
+*.db
+*.cfg

@@ -1,0 +1,4 @@
+export AIRFLOW_HOME="/home/dimk/Python/airflow_course/airflow_1/airflow"
+source env/bin/activate
+airflow scheduler
+airflow webserver -p 8080
