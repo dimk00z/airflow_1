@@ -40,7 +40,6 @@ def parse_yandex_covid_json(json):
 def write_covid_csv(regions, file_name='covid.csv', dest_folder=Path.cwd()):
     csv_file_name = Path.joinpath(
         dest_folder, file_name)
-    print(csv_file_name)
     with open(csv_file_name, 'w+', encoding='utf-8') as f:
         writer = csv.writer(f)
         for row in regions:
