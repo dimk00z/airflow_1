@@ -4,8 +4,6 @@ import os
 import json
 from pathlib import Path
 
-from airflow.utils.dates import days_ago
-
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 
@@ -43,11 +41,9 @@ def parse_yandex_covid_json():
     return regions
 
 
-def write_csv(file_name='covid.csv', dest_folder=Path.cwd(),**kwargs):
+def write_csv(**kwargs):
     regions = parse_yandex_covid_json()
-    csv_file_name = Path.joinpath(
-        dest_folder, file_name)
-    with open(csv_file_name, 'w+', encoding='utf-8') as f:
+    with open('/var/www/html/covid.csv', 'w+', encoding='utf-8') as f:
         writer = csv.writer(f)
         for row in regions:
             writer.writerow(row)
@@ -62,6 +58,7 @@ dag = DAG(
     dag_id='yandex_covid_python_operator',
     default_args=args,
     schedule_interval='0 12 * * *',
+    start_date=datetime(2020, 6, 4),
     tags=['yandex, covid']
 )
 
@@ -70,26 +67,5 @@ run_this = PythonOperator(
     task_id='get_covid_data',
     provide_context=True,
     python_callable=write_csv,
-    # op_kwargs={'dest_folder': '/home/dimk/Python/airflow_course/airflow_1/'},
     dag=dag,
 )
-# [END howto_operator_python]
-
-
-# # [START howto_operator_python_kwargs]
-# def my_sleeping_function(random_base):
-#     """This is a function that will run within the DAG execution"""
-#     time.sleep(random_base)
-
-
-# Generate 5 sleeping tasks, sleeping from 0.0 to 0.4 seconds respectively
-
-# task = PythonOperator(
-#         task_id='sleep_for_' + str(i),
-#         python_callable=my_sleeping_function,
-#         op_kwargs={'random_base': float(i) / 10},
-#         dag=dag,
-#     )
-
-# run_this >> task
-# [END howto_operator_python_kwargs]
