@@ -2,6 +2,7 @@ import requests
 import csv
 import os
 import json
+from datetime import datetime
 from pathlib import Path
 
 from airflow.models import DAG
@@ -50,8 +51,7 @@ def write_csv(**kwargs):
 
 
 args = {
-    'owner': 'Airflow',
-    'start_date': days_ago(2),
+    'owner': 'Airflow'
 }
 
 dag = DAG(
